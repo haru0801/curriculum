@@ -18,6 +18,11 @@
                 </div>
             @endforeach
         </div>
+        <form action="{{ route('cat') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="photo" accept="image/*">
+            <button type="submit">写真をアップロード</button>
+        </form>
         <a href='/posts/create'>create</a>
         <div class='paginate'>
             {{ $posts->links() }}

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use App\Http\Requests\PostRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
 {
@@ -38,6 +40,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $input_post = $request['post'];
+        ddd($input_post);
         $post->fill($input_post)->save();
         return redirect('/posts/' . $post->id);
     }
@@ -47,5 +50,21 @@ class PostController extends Controller
         $post->delete();
         return redirect('/');
     }
+    
+    public function cat(Request $request)
+    {
+        
+        $photo = $request->file('photo');
+
+        $response = Http::withBasicAuth('maru0819', 'haru0801')
+            ->attach('image', file_get_contents($photo), $photo->getClientOriginalName())
+            ->post('http://whatcat.ap.mextractr.net/api_query',);
+
+       
+        $cat = $response->json();
+        
+        return view('posts/cat')->with(['cats' => $cat]);
+    }
+    
 }
 ?>
