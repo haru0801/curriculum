@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -27,6 +28,7 @@ class PostController extends Controller
     
     public function store(PostRequest $request, Post $post)
     {
+        $post->user_id = \Auth::id(); 
         $input = $request['post'];
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
@@ -40,7 +42,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $input_post = $request['post'];
-        ddd($input_post);
+        
         $post->fill($input_post)->save();
         return redirect('/posts/' . $post->id);
     }
