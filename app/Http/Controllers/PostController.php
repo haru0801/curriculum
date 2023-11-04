@@ -66,5 +66,60 @@ class PostController extends Controller
         return view('posts/cat')->with(['cats' => $cat]);
     }
     
+    public function map()
+    {
+        $apiKey = env('GOOGLE_PLACES_API_KEY');  // あなたのGoogle Places APIキーを設定
+        $lat = 35.730132;  // 緯度を設定
+        $lon = 139.708302;  // 経度を設定
+        $search = "ラーメン";  // 検索ワードを設定
+        
+        // Google Places APIのURLを構築
+        $url = sprintf(
+            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s,%s&radius=1500&type=restaurant&keyword=%s&language=ja&key=%s",
+            $lat,
+            $lon,
+            urlencode($search),
+            $apiKey
+        );
+        
+        // cURLを使用してAPIリクエストを送信
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        // JSONレスポンスを配列にデコード
+        $places = json_decode($response, true)['results'];
+        
+        $details = [];
+        foreach($places as $place)
+        {
+            $placeId = $place['place_id'];  // 特定の場所のplace_idを設定
+            
+            // Google Places APIのURLを構築
+            $url = sprintf(
+                "https://maps.googleapis.com/maps/api/place/details/json?place_id=%s&language=ja&key=%s",
+                 //"https://maps.googleapis.com/maps/api/place/details/json?place_id=%25s&fields=geometry/location&key=%25s", //座標
+                $placeId,
+                $apiKey
+            );
+            
+            // cURLを使用してAPIリクエストを送信
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            
+            // JSONレスポンスを配列にデコード
+            $detail = json_decode($response, true)['result'];
+            $details[] = $detail;
+        }
+        
+            dd($details);
+    }
+    
+    
 }
 ?>

@@ -1,5 +1,7 @@
 <x-app-layout>
+    
     <body>
+       
         <h1>Blog Name</h1>
         <div class='posts'>
             @foreach ($posts as $post)
@@ -10,6 +12,7 @@
                     </h2>
                     <p class='body'>{{ $post->body }}</p>
                    <a href="/categories/{{ $post->category->id }}">{{ $post->category->name }}</a>
+                   <a href="/chat/{{ $post->user->id }}">{{ $post->user->name }}とチャットする</a>
                     <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
                         @csrf
                         @method('DELETE')
@@ -18,6 +21,7 @@
                 </div>
             @endforeach
         </div>
+        
         <form action="{{ route('cat') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="file" name="photo" accept="image/*">
