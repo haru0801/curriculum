@@ -7,11 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    
+    public function sendPasswordResetNotification($token)
+    {
+        $url = url("reset-password/${token}");
+        $this->notify(new ResetPasswordNotification($url));
+    }
+    
     /**
      * The attributes that are mass assignable.
      *
