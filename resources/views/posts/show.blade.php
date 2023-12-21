@@ -1,6 +1,6 @@
 <x-app-layout>
     <body>
-        <a href="/categories/{{ $post->category->id }}">{{ $post->category->name }}</a>
+        
         <h1 class = 'title'>
             {{ $post->title }}
         </h1>
