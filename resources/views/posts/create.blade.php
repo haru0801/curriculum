@@ -8,7 +8,7 @@
     </head>
     <body class="antialiased">
         <h1>Blog Name</h1>
-        <form action="/posts" method="Post">
+        <form action="/posts" method="Post" enctype="multipart/form-data">
             @csrf
             <div class="title">
                 <h2>Title</h2>
@@ -20,7 +20,10 @@
                 <textarea name="post[body]" placeholder="今日も1日お疲れ様でした。">{{ old('post.body') }}</textarea>
                 <p class="body__error" style="color:red">{{ $errors->first('post.body') }}</p>
             </div>
-            <input type="submit" value="store">
+            <div class="image">
+                <input type="file" name="image">
+            </div>
+           
             <div class="category">
                 <h2>Category</h2>
                 <select name="post[category_id]">
@@ -29,6 +32,7 @@
                     @endforeach
                 </select>
             </div>
+            <input type="submit" value="store">
         </form>
         <div class="footer">
             <a href="/">戻る</a>
