@@ -8,6 +8,9 @@
             <div class='content_post'>
                 <h3>本文</h3>   
                 <p class='body'>{{ $post->body }}</p>
+                <div>
+                <video src="{{ $post->image }}" alt="画像が読み込めません。"/>
+            </div>
             </div>   
         </div>
         <div class="edit">

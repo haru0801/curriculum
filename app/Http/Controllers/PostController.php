@@ -8,6 +8,7 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Cloudinary;
 
 class PostController extends Controller
 {
@@ -26,8 +27,11 @@ class PostController extends Controller
         return view('posts/create')->with(['categories' => $category->get()]);
     }
     
-    public function store(PostRequest $request, Post $post)
+    public function store(Request $request, Post $post)
     {
+        $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+        //dd($image_url); 
+        $post->image = $image_url; 
         $post->user_id = \Auth::id(); 
         $input = $request['post'];
         $post->fill($input)->save();
